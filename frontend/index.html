@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tour Tracker — отслеживание лучших цен на пакетные туры. Уведомляем, когда цена падает.">
+    <title>Tour Tracker — Лучшие цены на туры</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-inner">
+            <a href="/" class="logo">✈️ Tour Tracker</a>
+            <nav class="nav">
+                <a href="/" class="nav-link active" data-page="home">Главная</a>
+                <a href="/tours" class="nav-link" data-page="tours">Горящие туры</a>
+                <a href="/about" class="nav-link" data-page="about">О сервисе</a>
+            </nav>
+            <div class="header-actions">
+                <a href="https://t.me/your_bot_username" target="_blank" class="btn btn-telegram">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161l-1.97 9.281c-.146.658-.537.818-1.084.508l-3-2.211-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.59-5.023c.243-.213-.054-.333-.373-.121l-6.92 4.352-2.982-.928c-.65-.204-.667-.65.137-.969l11.66-4.493c.543-.194 1.017.134.831.963z"/></svg>
+                    Telegram
+                </a>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="app"></main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-col">
+                <h3>✈️ Tour Tracker</h3>
+                <p>Сервис отслеживания лучших цен на пакетные туры. Уведомляем, когда цена падает — вы бронируете по партнёрской ссылке.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Навигация</h4>
+                <a href="/">Главная</a>
+                <a href="/tours">Горящие туры</a>
+                <a href="/about">О сервисе</a>
+            </div>
+            <div class="footer-col">
+                <h4>Боты</h4>
+                <a href="https://t.me/your_bot_username" target="_blank">Telegram-бот</a>
+                <a href="#" target="_blank">MAX-бот (скоро)</a>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <p>support@tourtracker.example.com</p>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>© 2026 Tour Tracker. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

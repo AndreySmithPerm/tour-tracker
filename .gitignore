@@ -1,0 +1,51 @@
+# ===== Environment & Secrets =====
+.env
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# ===== Go Build =====
+tour-tracker
+tour-tracker.exe
+vendor/
+*.exe
+*.exe~
+
+# ===== IDE =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.classpath
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Docker =====
+docker-compose.override.yml
+!.dockerignore
+
+# ===== Deploy (SSL keys stay on host) =====
+deploy/ssl/*.pem
+deploy/ssl/*.key
+deploy/ssl/*.crt
+
+# ===== Logs =====
+*.log
+logs/
+
+# ===== Migrations (keep SQL, ignore generated) =====
+migrations/*.sql~
+
+# ===== Temporary =====
+tmp/
+temp/
+*.tmp
