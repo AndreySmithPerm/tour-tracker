@@ -23,7 +23,7 @@ func NewFromURL(databaseURL string) (*Storage, error) {
 	db := pg.Connect(opts)
 
 	// Test connection
-	_, err = db.Exec(context.Background(), "SELECT 1")
+	_, err = db.ExecContext(context.Background(), "SELECT 1")
 	if err != nil {
 		db.Close()
 		return nil, fmt.Errorf("ping database: %w", err)
