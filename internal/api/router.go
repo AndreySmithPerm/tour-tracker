@@ -132,7 +132,7 @@ func (a *API) handleCreateSubscription(w http.ResponseWriter, r *http.Request) {
 		writeError(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
-	if req.OriginCity == " || req.Destination == " {
+	if req.OriginCity == "" || req.Destination == "" {
 		writeError(w, "Город вылета и направление обязательны", http.StatusBadRequest)
 		return
 	}

@@ -49,7 +49,16 @@ func Load() (*Config, error) {
 
 	botToken := os.Getenv("TELEGRAM_BOT_TOKEN")
 
+	// Try DATABASE_URL first, then construct from DB_* vars
 	dbURL := os.Getenv("DATABASE_URL")
+	if dbURL == "" {
+		dbName := os.Getenv("DB_NAME")
+		dbUser := os.Getenv("DB_USER")
+		dbPass := os.Getenv("DB_PASSWORD")
+		if dbName != "" && dbUser != "" && dbPass != "" {
+			dbURL = fmt.Sprintf("postgres://%s:%s@postgres:5432/%s?sslmode=disable", dbUser, dbPass, dbName)
+		}
+	}
 
 	port, _ := strconv.Atoi(os.Getenv("HTTP_PORT"))
 	if port == 0 {
