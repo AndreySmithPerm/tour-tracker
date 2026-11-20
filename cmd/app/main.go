@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"strconv"
 	"github.com/travel-to-tour/tour-tracker/internal/affiliate"
 	"github.com/travel-to-tour/tour-tracker/internal/api"
 	"github.com/travel-to-tour/tour-tracker/internal/config"
@@ -80,7 +81,7 @@ func main() {
 	mux.Mount("/", webRouter)
 
 	httpServer := &http.Server{
-		Addr:         ":" + string(cfg.Server.Port),
+		Addr:         ":" + strconv.Itoa(cfg.Server.Port),
 		Handler:      mux,
 		ReadTimeout:  15 * time.Second,
 		WriteTimeout: 15 * time.Second,
@@ -102,7 +103,7 @@ func main() {
 
 	go func() {
 		log.Printf("HTTP server starting on port %d", cfg.Server.Port)
-		log.Println("Site: http://localhost:" + string(cfg.Server.Port))
+		log.Println("Site: http://localhost:" + strconv.Itoa(cfg.Server.Port))
 		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("HTTP server error: %v", err)
 		}
