@@ -96,7 +96,7 @@ function renderHome() {
             </div>
             <div class="destinations-grid">
                 <div class="destination-card">
-                    <img src="https://images.unsplash.com/photo-1541480641028-06101a87633f?w=600&q=80" alt="Турция">
+                    <img src="/static/images/destinations/Turkey.jpg" alt="Турция">
                     <div class="destination-overlay">
                         <h3>🇹🇷 Турция</h3>
                         <p>от 45 000 ₽</p>
@@ -117,7 +117,7 @@ function renderHome() {
                     </div>
                 </div>
                 <div class="destination-card">
-                    <img src="https://images.unsplash.com/photo-1572252039235-8809a77b432c?w=600&q=80" alt="Египет">
+                    <img src="/static/images/destinations/Italy.jpg" alt="Египет">
                     <div class="destination-overlay">
                         <h3>🇪🇬 Египет</h3>
                         <p>от 40 000 ₽</p>
