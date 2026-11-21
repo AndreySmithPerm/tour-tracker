@@ -88,12 +88,8 @@ function renderHome() {
                     </div>
                     <div class="search-row">
                         <div class="search-field">
-                            <label>Дата 1</label>
+                            <label>Выберите диапазон поиска</label>
                             <input type="date" id="heroDateFrom">
-                        </div>
-                        <div class="search-field">
-                            <label>Дата 2</label>
-                            <input type="date" id="heroDateTo">
                         </div>
                         <div class="search-field">
                             <label>Ночей</label>
@@ -104,7 +100,7 @@ function renderHome() {
                             <input type="number" id="heroBudget" placeholder="Не ограничено">
                         </div>
                     </div>
-                    <div class="search-row row-3">
+                    <div class="search-row">
                         <div class="search-field messenger-field">
                             <label>📩 Куда отправить уведомление?</label>
                             <div class="messenger-selector">
@@ -126,12 +122,14 @@ function renderHome() {
                                 </label>
                             </div>
                         </div>
-                        <div class="search-field contact-field">
-                            <label>Ваш контакт</label>
-                            <input type="text" id="heroContact" placeholder="@username или ID" required>
-                        </div>
-                        <div class="search-field button-field">
-                            <button type="button" onclick="handleHeroSearch()" class="btn btn-primary btn-large">Найти 🔍</button>
+                        <div class="search-field contact-actions">
+                            <div class="contact-input">
+                                <label>Ваш контакт</label>
+                                <input type="text" id="heroContact" placeholder="@username или ID" required>
+                            </div>
+                            <div class="contact-button">
+                                <button type="button" onclick="handleHeroSearch()" class="btn btn-primary btn-large">Найти 🔍</button>
+                            </div>
                         </div>
                     </div>
                 </form>
