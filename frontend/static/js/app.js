@@ -96,28 +96,28 @@ function renderHome() {
             </div>
             <div class="destinations-grid">
                 <div class="destination-card">
-                    <img src="https://picsum.photos/seed/turkey/600/400" alt="Турция">
+                    <img src="https://images.unsplash.com/photo-1541480641028-06101a87633f?w=600&q=80" alt="Турция">
                     <div class="destination-overlay">
                         <h3>🇹🇷 Турция</h3>
                         <p>от 45 000 ₽</p>
                     </div>
                 </div>
                 <div class="destination-card">
-                    <img src="https://picsum.photos/seed/uae/600/400" alt="ОАЭ">
+                    <img src="https://images.unsplash.com/photo-1539768942893-daf53e736b68?w=600&q=80" alt="ОАЭ">
                     <div class="destination-overlay">
                         <h3>🇦🇪 ОАЭ</h3>
                         <p>от 55 000 ₽</p>
                     </div>
                 </div>
                 <div class="destination-card">
-                    <img src="https://picsum.photos/seed/thailand/600/400" alt="Таиланд">
+                    <img src="https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?w=600&q=80" alt="Таиланд">
                     <div class="destination-overlay">
                         <h3>🇹🇭 Таиланд</h3>
                         <p>от 70 000 ₽</p>
                     </div>
                 </div>
                 <div class="destination-card">
-                    <img src="https://picsum.photos/seed/egypt2024/600/400" alt="Египет">
+                    <img src="https://images.unsplash.com/photo-1572252039235-8809a77b432c?w=600&q=80" alt="Египет">
                     <div class="destination-overlay">
                         <h3>🇪🇬 Египет</h3>
                         <p>от 40 000 ₽</p>
