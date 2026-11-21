@@ -154,6 +154,7 @@ function renderHome() {
                             <label class="messenger-option">
                                 <input type="radio" name="messenger" value="telegram" checked>
                                 <div class="messenger-card">
+                                    <span class="messenger-check">✓</span>
                                     <span class="messenger-icon">✈️</span>
                                     <span class="messenger-name">Telegram</span>
                                     <span class="messenger-hint">@username или @username</span>
@@ -162,6 +163,7 @@ function renderHome() {
                             <label class="messenger-option">
                                 <input type="radio" name="messenger" value="max">
                                 <div class="messenger-card">
+                                    <span class="messenger-check">✓</span>
                                     <span class="messenger-icon">💬</span>
                                     <span class="messenger-name">MAX</span>
                                     <span class="messenger-hint">ID или ссылка на профиль</span>
@@ -399,6 +401,22 @@ async function handleSubscribe(e) {
 
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
+
+    // Validate messenger selection
+    if (!data.messenger || data.messenger === '') {
+        showFormMessage(msgEl, '⚠️ Выберите мессенджер для оповещения!', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Добавить подписку';
+        return;
+    }
+
+    // Validate user identifier
+    if (!data.user_identifier || data.user_identifier.trim() === '') {
+        showFormMessage(msgEl, '⚠️ Укажите ваш контакт для отправки уведомления', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Добавить подписку';
+        return;
+    }
 
     // Convert types for API
     const payload = {

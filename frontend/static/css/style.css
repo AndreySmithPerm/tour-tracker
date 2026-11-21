@@ -429,6 +429,7 @@ img { max-width: 100%; }
     border-radius: var(--radius-md);
     transition: all 0.2s;
     background: #fff;
+    position: relative;
 }
 
 .messenger-card:hover {
@@ -440,6 +441,31 @@ img { max-width: 100%; }
     border-color: var(--gold);
     background: linear-gradient(135deg, #fff9e6, #fff);
     box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+.messenger-check {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: bold;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.2s;
+}
+
+.messenger-option input[type="radio"]:checked + .messenger-card .messenger-check {
+    background: var(--gold);
+    opacity: 1;
+    transform: scale(1);
 }
 
 .messenger-icon {
