@@ -374,34 +374,37 @@ async function handleSubscribe(e) {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
-    if (data.nights) {
-        data.nights = parseInt(data.nights);
-        if (data.nights < 1 || data.nights > 30) {
-            showFormMessage(msgEl, 'Неверное количество ночей (1-30)', 'error');
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Добавить подписку';
-            return;
-        }
+    // Convert types for API
+    const payload = {
+        origin_city: data.origin_city,
+        destination: data.destination,
+        date_from: data.date_from || '',
+        yandex_captcha_response: data.yandex_captcha_response || '',
+    };
+    if (data.nights && parseInt(data.nights) >= 1 && parseInt(data.nights) <= 30) {
+        payload.nights = parseInt(data.nights);
+    } else {
+        payload.nights = 7;
     }
-
-    if (data.max_price) {
-        data.max_price = parseInt(data.max_price);
-        if (data.max_price < 0) {
-            showFormMessage(msgEl, 'Неверный бюджет', 'error');
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Добавить подписку';
-            return;
-        }
-    }
+    payload.max_price = data.max_price ? parseInt(data.max_price) || 0 : 0;
 
     try {
         const res = await fetch(`${API}/subscriptions`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
+            body: JSON.stringify(payload),
         });
 
-        const result = await res.json();
+        let result;
+        const text = await res.text();
+        try {
+            result = JSON.parse(text);
+        } catch {
+            showFormMessage(msgEl, text || 'Ошибка сервера', 'error');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Добавить подписку';
+            return;
+        }
 
         if (res.ok) {
             showFormMessage(msgEl, '✅ Подписка создана! Мы уведомим вас в Telegram.', 'success');
