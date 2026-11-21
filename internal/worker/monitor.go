@@ -107,14 +107,32 @@ func (m *Monitor) groupSubscriptions(subs []*domain.Subscription) map[domain.Sea
 	grouped := make(map[domain.SearchKey][]*domain.Subscription)
 
 	for _, sub := range subs {
-		key := domain.SearchKey{
-			OriginCity:  strings.ToLower(sub.OriginCity),
-			Destination: strings.ToLower(sub.Destination),
-			Country:     strings.ToLower(sub.Country),
-			MonthBucket: sub.DateFrom.Format("2006-01"),
+		origin := strings.ToLower(sub.OriginCity)
+		destination := strings.ToLower(sub.Destination)
+		country := strings.ToLower(sub.Country)
+
+		// Determine month range: use DateFrom..DateTo if set, otherwise default to current month
+		now := time.Now()
+		startMonth := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, time.UTC)
+		endMonth := startMonth.AddDate(0, 1, 0)
+
+		if !sub.DateFrom.IsZero() {
+			startMonth = time.Date(sub.DateFrom.Year(), sub.DateFrom.Month(), 1, 0, 0, 0, 0, time.UTC)
+		}
+		if !sub.DateTo.IsZero() {
+			endMonth = time.Date(sub.DateTo.Year(), sub.DateTo.Month()+1, 1, 0, 0, 0, 0, time.UTC)
 		}
 
-		grouped[key] = append(grouped[key], sub)
+		// Create a group key for each month in the range
+		for month := startMonth; month.Before(endMonth); month = month.AddDate(0, 1, 0) {
+			key := domain.SearchKey{
+				OriginCity:  origin,
+				Destination: destination,
+				Country:     country,
+				MonthBucket: fmt.Sprintf("%04d-%02d", month.Year(), int(month.Month())),
+			}
+			grouped[key] = append(grouped[key], sub)
+		}
 	}
 
 	return grouped

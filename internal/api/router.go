@@ -122,6 +122,7 @@ type createSubscriptionRequest struct {
 	OriginCity       string `json:"origin_city"`
 	Destination      string `json:"destination"`
 	DateFrom         string `json:"date_from"`
+	DateTo           string `json:"date_to"`
 	Nights           int    `json:"nights"`
 	MaxPrice         int    `json:"max_price"`
 	Messenger        string `json:"messenger"`
@@ -202,6 +203,11 @@ func (a *API) handleCreateSubscription(w http.ResponseWriter, r *http.Request) {
 	if req.DateFrom != "" {
 		if date, err := time.Parse("2006-01-02", req.DateFrom); err == nil {
 			sub.DateFrom = date
+		}
+	}
+	if req.DateTo != "" {
+		if date, err := time.Parse("2006-01-02", req.DateTo); err == nil {
+			sub.DateTo = date
 		}
 	}
 
