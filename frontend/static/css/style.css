@@ -11,6 +11,9 @@
     --card-bg: #ffffff;
     --radius: 16px;
     --radius-sm: 10px;
+    --radius-md: 12px;
+    --border: #e0e0e0;
+    --blue: #0088cc;
     --shadow: 0 4px 20px rgba(0,0,0,0.08);
     --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
 }
@@ -196,14 +199,13 @@ img { max-width: 100%; }
 
 .search-form form {
     display: flex;
+    flex-direction: column;
     gap: 12px;
-    flex-wrap: wrap;
-    align-items: flex-end;
 }
 
 .search-field {
     flex: 1;
-    min-width: 180px;
+    min-width: 150px;
 }
 
 .search-field label {
@@ -222,29 +224,11 @@ img { max-width: 100%; }
     background: rgba(255,255,255,0.15);
 }
 
-.search-field.messenger-field {
-    flex: 2;
-    min-width: 300px;
-}
-
-.search-row .search-field:last-child {
-    flex: 0 0 auto;
-    max-width: 250px;
-}
-
-.search-row .search-field:last-child .btn-large {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .search-row {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 12px;
+    align-items: flex-end;
 }
 
 .search-row:last-child {
@@ -253,7 +237,28 @@ img { max-width: 100%; }
 
 .search-row .search-field {
     flex: 1;
-    min-width: 150px;
+    min-width: 140px;
+}
+
+/* Третий ряд: мессенджер + контакт + кнопка */
+.search-row.row-3 {
+    align-items: stretch;
+}
+
+.search-row.row-3 .search-field.messenger-field {
+    flex: 2;
+    min-width: 250px;
+}
+
+.search-row.row-3 .search-field.contact-field {
+    flex: 1;
+    min-width: 180px;
+}
+
+.search-row.row-3 .search-field.button-field {
+    flex: 0 0 auto;
+    min-width: 140px;
+    max-width: 160px;
 }
 
 .btn-large {
@@ -261,6 +266,11 @@ img { max-width: 100%; }
     font-size: 16px;
     font-weight: 600;
     white-space: nowrap;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .search-field input,
@@ -290,11 +300,6 @@ img { max-width: 100%; }
 .search-field select option {
     background: var(--dark);
     color: white;
-}
-
-.search-form .btn {
-    padding: 14px 32px;
-    white-space: nowrap;
 }
 
 /* ===== Popular Destinations ===== */
@@ -517,9 +522,23 @@ img { max-width: 100%; }
 }
 
 /* Hero messenger selector styling */
+.search-form .messenger-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    height: 100%;
+}
+
+.search-form .messenger-option {
+    height: 100%;
+}
+
 .search-form .messenger-card {
     border-color: rgba(255,255,255,0.2);
     background: rgba(255,255,255,0.1);
+    height: 100%;
+    min-height: 120px;
+    justify-content: center;
 }
 
 .search-form .messenger-card:hover {

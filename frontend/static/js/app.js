@@ -104,7 +104,7 @@ function renderHome() {
                             <input type="number" id="heroBudget" placeholder="Не ограничено">
                         </div>
                     </div>
-                    <div class="search-row">
+                    <div class="search-row row-3">
                         <div class="search-field messenger-field">
                             <label>📩 Куда отправить уведомление?</label>
                             <div class="messenger-selector">
@@ -126,11 +126,11 @@ function renderHome() {
                                 </label>
                             </div>
                         </div>
-                        <div class="search-field">
+                        <div class="search-field contact-field">
                             <label>Ваш контакт</label>
                             <input type="text" id="heroContact" placeholder="@username или ID" required>
                         </div>
-                        <div class="search-field">
+                        <div class="search-field button-field">
                             <button type="button" onclick="handleHeroSearch()" class="btn btn-primary btn-large">Найти 🔍</button>
                         </div>
                     </div>
