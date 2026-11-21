@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="sky2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#sky2)"/>
+  <rect x="150" y="120" width="60" height="200" fill="#e8d5b7" rx="5"/>
+  <rect x="230" y="80" width="80" height="240" fill="#f0e0c8" rx="5"/>
+  <rect x="330" y="140" width="50" height="180" fill="#e8d5b7" rx="5"/>
+  <rect x="390" y="100" width="70" height="220" fill="#f0e0c8" rx="5"/>
+  <polygon points="180,120 150,120 165,90" fill="#d4c4a8"/>
+  <polygon points="270,80 230,80 270,50" fill="#d4c4a8"/>
+  <polygon points="355,140 330,140 355,110" fill="#d4c4a8"/>
+  <polygon points="425,100 390,100 425,70" fill="#d4c4a8"/>
+  <rect y="320" width="600" height="80" fill="#d4a574"/>
+  <text x="300" y="370" font-family="Arial" font-size="16" fill="white" text-anchor="middle" font-weight="bold">🇦🇪 ОАЭ</text>
+</svg>
