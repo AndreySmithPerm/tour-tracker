@@ -88,7 +88,7 @@ function renderHome() {
                     </div>
                     <div class="search-row">
                         <div class="search-field">
-                            <label>Дата вылета</label>
+                            <label>Дата 1</label>
                             <input type="date" id="heroDateFrom">
                         </div>
                         <div class="search-field">
