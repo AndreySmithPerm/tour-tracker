@@ -148,18 +148,31 @@ function renderHome() {
                         <label>Макс. бюджет на человека (₽)</label>
                         <input type="number" name="max_price" placeholder="Не ограничено">
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Мессенджер</label>
-                            <select name="messenger" required>
-                                <option value="telegram">Telegram</option>
-                                <option value="max">MAX</option>
-                            </select>
+                    <div class="form-group">
+                        <label>📩 Выберите мессенджер для оповещения!</label>
+                        <div class="messenger-selector">
+                            <label class="messenger-option">
+                                <input type="radio" name="messenger" value="telegram" checked>
+                                <div class="messenger-card">
+                                    <span class="messenger-icon">✈️</span>
+                                    <span class="messenger-name">Telegram</span>
+                                    <span class="messenger-hint">@username или @username</span>
+                                </div>
+                            </label>
+                            <label class="messenger-option">
+                                <input type="radio" name="messenger" value="max">
+                                <div class="messenger-card">
+                                    <span class="messenger-icon">💬</span>
+                                    <span class="messenger-name">MAX</span>
+                                    <span class="messenger-hint">ID или ссылка на профиль</span>
+                                </div>
+                            </label>
                         </div>
-                        <div class="form-group">
-                            <label>Username или ID</label>
-                            <input type="text" name="user_identifier" placeholder="@username или chat_id" required>
-                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Ваш контакт</label>
+                        <input type="text" name="user_identifier" placeholder="@username" required>
+                        <small class="form-hint">Напишем вам, когда найдём выгодный тур</small>
                     </div>
                     <button type="submit" class="btn btn-primary" style="width:100%;">Добавить подписку</button>
                     <div class="form-message" id="formMessage"></div>

@@ -128,6 +128,11 @@ type createSubscriptionRequest struct {
 	UserIdentifier   string `json:"user_identifier"`
 }
 
+const (
+	MessengerTelegram = "telegram"
+	MessengerMax      = "max"
+)
+
 func (a *API) handleCreateSubscription(w http.ResponseWriter, r *http.Request) {
 	r.Body = http.MaxBytesReader(w, r.Body, 64*1024)
 	var req createSubscriptionRequest
@@ -166,8 +171,8 @@ func (a *API) handleCreateSubscription(w http.ResponseWriter, r *http.Request) {
 		writeError(w, "Выберите мессенджер", http.StatusBadRequest)
 		return
 	}
-	if req.Messenger != "telegram" && req.Messenger != "max" {
-		writeError(w, "Неподдерживаемый мессенджер", http.StatusBadRequest)
+	if req.Messenger != MessengerTelegram && req.Messenger != MessengerMax {
+		writeError(w, "Неподдерживаемый мессенджер. Выберите Telegram или MAX", http.StatusBadRequest)
 		return
 	}
 	if req.UserIdentifier == "" {
@@ -178,7 +183,7 @@ func (a *API) handleCreateSubscription(w http.ResponseWriter, r *http.Request) {
 	var userID int64
 	if uid, ok := r.Context().Value(sec.UserIDKey).(int64); ok && uid > 0 {
 		userID = uid
-	} else if req.Messenger == "telegram" {
+	} else if req.Messenger == MessengerTelegram {
 		// Try to find user by identifier (chat_id or username)
 		userID, _ = a.findUserByMessengerID(r.Context(), req.Messenger, req.UserIdentifier)
 	}

@@ -12,6 +12,7 @@ import (
 type Config struct {
 	Travelpayouts APIConfig
 	Telegram      TelegramConfig
+	Max           MaxConfig
 	Database      DatabaseConfig
 	Server        ServerConfig
 	Worker        WorkerConfig
@@ -25,6 +26,11 @@ type APIConfig struct {
 
 type TelegramConfig struct {
 	Token string
+}
+
+type MaxConfig struct {
+	APIKey  string
+	BaseURL string
 }
 
 type DatabaseConfig struct {
@@ -48,6 +54,8 @@ func Load() (*Config, error) {
 	trs, _ := strconv.Atoi(os.Getenv("TRAVELPAYOUTS_TRS"))
 
 	botToken := os.Getenv("TELEGRAM_BOT_TOKEN")
+	maxAPIKey := os.Getenv("MAX_API_KEY")
+	maxBaseURL := os.Getenv("MAX_BASE_URL")
 
 	// Try DATABASE_URL first, then construct from DB_* vars
 	dbURL := os.Getenv("DATABASE_URL")
@@ -82,6 +90,10 @@ func Load() (*Config, error) {
 		},
 		Telegram: TelegramConfig{
 			Token: botToken,
+		},
+		Max: MaxConfig{
+			APIKey:  maxAPIKey,
+			BaseURL: maxBaseURL,
 		},
 		Database: DatabaseConfig{
 			URL: dbURL,

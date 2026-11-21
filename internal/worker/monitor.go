@@ -9,8 +9,9 @@ import (
 
 	"github.com/go-pg/pg/v10"
 	"github.com/travel-to-tour/tour-tracker/internal/affiliate"
-	"github.com/travel-to-tour/tour-tracker/internal/domain"
+	delivery "github.com/travel-to-tour/tour-tracker/internal/delivery"
 	"github.com/travel-to-tour/tour-tracker/internal/delivery/telegram"
+	"github.com/travel-to-tour/tour-tracker/internal/domain"
 	"github.com/travel-to-tour/tour-tracker/internal/provider"
 	"github.com/travel-to-tour/tour-tracker/internal/storage"
 )
@@ -21,6 +22,7 @@ type Monitor struct {
 	providers   []provider.TourProvider
 	affiliate   *affiliate.Client
 	telegram    *telegram.Bot
+	max         *delivery.MaxBot
 	logger      *log.Logger
 	stopCh      chan struct{}
 }
@@ -31,12 +33,14 @@ func NewMonitor(
 	providers []provider.TourProvider,
 	aff *affiliate.Client,
 	tg *telegram.Bot,
+	max *delivery.MaxBot,
 ) *Monitor {
 	return &Monitor{
 		storage:   s,
 		providers: providers,
 		affiliate: aff,
 		telegram:  tg,
+		max:       max,
 		logger:    log.Default(),
 		stopCh:    make(chan struct{}),
 	}
@@ -239,14 +243,21 @@ func (m *Monitor) notifyUsers(ctx context.Context, subs []*domain.Subscription, 
 			continue
 		}
 
-		// Send notification via Telegram (если бот подключён)
-		if m.telegram == nil {
-			m.logger.Printf("No Telegram bot configured — skipping notification for user %d", userID)
-			continue
-		}
-		err = m.telegram.SendTourNotification(ctx, userID, offer, sub, reason)
-		if err != nil {
-			m.logger.Printf("Telegram send error for user %d: %v", userID, err)
+		// Send notification via selected messenger
+		if sub.Messenger == "telegram" && m.telegram != nil {
+			err = m.telegram.SendTourNotification(ctx, userID, offer, sub, reason)
+			if err != nil {
+				m.logger.Printf("Telegram send error for user %d: %v", userID, err)
+				continue
+			}
+		} else if sub.Messenger == "max" && m.max != nil {
+			err = m.max.SendTourNotification(ctx, sub.UserIdentifier, offer, sub, reason)
+			if err != nil {
+				m.logger.Printf("MAX send error for user %s: %v", sub.UserIdentifier, err)
+				continue
+			}
+		} else {
+			m.logger.Printf("No messenger bot configured for %s — skipping notification for user %d", sub.Messenger, userID)
 			continue
 		}
 

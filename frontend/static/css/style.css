@@ -402,6 +402,69 @@ img { max-width: 100%; }
     color: #721c24;
 }
 
+/* ===== Messenger Selector ===== */
+.messenger-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.messenger-option {
+    display: block;
+    cursor: pointer;
+}
+
+.messenger-option input[type="radio"] {
+    display: none;
+}
+
+.messenger-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 16px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+    background: #fff;
+}
+
+.messenger-card:hover {
+    border-color: var(--blue);
+    background: #f0f8ff;
+}
+
+.messenger-option input[type="radio"]:checked + .messenger-card {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, #fff9e6, #fff);
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+.messenger-icon {
+    font-size: 28px;
+}
+
+.messenger-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: #333;
+}
+
+.messenger-hint {
+    font-size: 12px;
+    color: #888;
+}
+
+.form-hint {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #888;
+    font-style: italic;
+}
+
 /* ===== Hot Tours ===== */
 .hot-tours {
     padding: 80px 20px;
@@ -746,5 +809,9 @@ img { max-width: 100%; }
     
     .form-row {
         grid-template-columns: 1fr;
+    }
+    
+    .messenger-selector {
+        grid-template-columns: 1fr 1fr;
     }
 }

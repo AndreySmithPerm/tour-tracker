@@ -17,6 +17,7 @@ import (
 	"github.com/travel-to-tour/tour-tracker/internal/config"
 	sec "github.com/travel-to-tour/tour-tracker/internal/middleware"
 	deliveryHTTP "github.com/travel-to-tour/tour-tracker/internal/delivery/http"
+	deliveryMax "github.com/travel-to-tour/tour-tracker/internal/delivery"
 	telegramDelivery "github.com/travel-to-tour/tour-tracker/internal/delivery/telegram"
 	"github.com/travel-to-tour/tour-tracker/internal/provider"
 	"github.com/travel-to-tour/tour-tracker/internal/storage"
@@ -60,9 +61,17 @@ func main() {
 		log.Println("Telegram: not configured")
 	}
 
+	var maxBot *deliveryMax.MaxBot
+	if cfg.Max.APIKey != "" {
+		maxBot = deliveryMax.NewMaxBot(cfg.Max.APIKey, cfg.Max.BaseURL, log.Default())
+		log.Println("MAX bot initialized")
+	} else {
+		log.Println("MAX: not configured")
+	}
+
 	var monitor *worker.Monitor
 	if affClient != nil {
-		monitor = worker.NewMonitor(s, providers, affClient, tgBot)
+		monitor = worker.NewMonitor(s, providers, affClient, tgBot, maxBot)
 		log.Println("Monitor initialized")
 	} else {
 		log.Println("Monitor: disabled (no affiliate client)")
