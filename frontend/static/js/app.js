@@ -92,7 +92,7 @@ function renderHome() {
                             <input type="date" id="heroDateFrom">
                         </div>
                         <div class="search-field">
-                            <label>Дата возврата</label>
+                            <label>Дата 2</label>
                             <input type="date" id="heroDateTo">
                         </div>
                         <div class="search-field">
@@ -126,8 +126,6 @@ function renderHome() {
                                 </label>
                             </div>
                         </div>
-                    </div>
-                    <div class="search-row">
                         <div class="search-field">
                             <label>Ваш контакт</label>
                             <input type="text" id="heroContact" placeholder="@username или ID" required>

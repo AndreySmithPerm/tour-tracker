@@ -227,6 +227,19 @@ img { max-width: 100%; }
     min-width: 300px;
 }
 
+.search-row .search-field:last-child {
+    flex: 0 0 auto;
+    max-width: 250px;
+}
+
+.search-row .search-field:last-child .btn-large {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .search-row {
     display: flex;
     gap: 12px;
