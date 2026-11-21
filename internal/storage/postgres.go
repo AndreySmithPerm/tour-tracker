@@ -91,6 +91,18 @@ func (s *Storage) EnsureUser(ctx context.Context, chatID int64, username string)
 	return user, nil
 }
 
+// FindUserByMessengerID finds a user by messenger type and identifier
+func (s *Storage) FindUserByMessengerID(ctx context.Context, messenger, identifier string) (*domain.User, error) {
+	var user domain.User
+	err := s.db.ModelContext(ctx, &user).
+		Where("tg_chat_id = ?", identifier).
+		First()
+	if err != nil {
+		return nil, pg.ErrNoRows
+	}
+	return &user, nil
+}
+
 // --- Subscription operations ---
 
 func (s *Storage) CreateSubscription(ctx context.Context, sub *domain.Subscription) error {

@@ -14,19 +14,21 @@ type User struct {
 
 // Subscription represents a user's tour search preference
 type Subscription struct {
-	ID            int64     `pg:"id,pk,autoincrement"`
-	UserID        int64     `pg:"user_id,notnull"`
-	OriginCity    string    `pg:"origin_city,notnull"`
-	Destination   string    `pg:"destination,notnull"`
-	Country       string    `pg:"country"`
-	DateFrom      time.Time `pg:"date_from"`
-	DateTo        time.Time `pg:"date_to"`
-	NightsMin     int       `pg:"nights_min,default:7"`
-	NightsMax     int       `pg:"nights_max,default:14"`
-	MaxPrice      int       `pg:"max_price"`          // maximum price in rubles
-	MinPriceDrop  float64   `pg:"min_price_drop,default:0.10"` // minimum price drop ratio to trigger notification (10%)
-	IsActive      bool      `pg:"is_active,default:true"`
-	CreatedAt     time.Time `pg:"created_at,notnull,default:now()"`
+	ID             int64     `pg:"id,pk,autoincrement"`
+	UserID         int64     `pg:"user_id,notnull"`
+	OriginCity     string    `pg:"origin_city,notnull"`
+	Destination    string    `pg:"destination,notnull"`
+	Country        string    `pg:"country"`
+	DateFrom       time.Time `pg:"date_from"`
+	DateTo         time.Time `pg:"date_to"`
+	NightsMin      int       `pg:"nights_min,default:7"`
+	NightsMax      int       `pg:"nights_max,default:14"`
+	MaxPrice       int       `pg:"max_price"`
+	MinPriceDrop   float64   `pg:"min_price_drop,default:0.10"`
+	IsActive       bool      `pg:"is_active,default:true"`
+	Messenger      string    `pg:"messenger"`           // telegram, max
+	UserIdentifier string    `pg:"user_identifier"`     // @username or chat_id
+	CreatedAt      time.Time `pg:"created_at,notnull,default:now()"`
 }
 
 // SearchKey is a deduplication key for grouping subscriptions

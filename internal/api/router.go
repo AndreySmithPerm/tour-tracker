@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -118,11 +119,13 @@ func (a *API) handleHotTours(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]interface{}{"tours": tours})
 }
 type createSubscriptionRequest struct {
-	OriginCity  string `json:"origin_city"`
-	Destination string `json:"destination"`
-	DateFrom    string `json:"date_from"`
-	Nights      int    `json:"nights"`
-	MaxPrice    int    `json:"max_price"`
+	OriginCity       string `json:"origin_city"`
+	Destination      string `json:"destination"`
+	DateFrom         string `json:"date_from"`
+	Nights           int    `json:"nights"`
+	MaxPrice         int    `json:"max_price"`
+	Messenger        string `json:"messenger"`
+	UserIdentifier   string `json:"user_identifier"`
 }
 
 func (a *API) handleCreateSubscription(w http.ResponseWriter, r *http.Request) {
@@ -159,19 +162,37 @@ func (a *API) handleCreateSubscription(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if req.Messenger == "" {
+		writeError(w, "Выберите мессенджер", http.StatusBadRequest)
+		return
+	}
+	if req.Messenger != "telegram" && req.Messenger != "max" {
+		writeError(w, "Неподдерживаемый мессенджер", http.StatusBadRequest)
+		return
+	}
+	if req.UserIdentifier == "" {
+		writeError(w, "Укажите username или ID", http.StatusBadRequest)
+		return
+	}
+
 	var userID int64
 	if uid, ok := r.Context().Value(sec.UserIDKey).(int64); ok && uid > 0 {
 		userID = uid
+	} else if req.Messenger == "telegram" {
+		// Try to find user by identifier (chat_id or username)
+		userID, _ = a.findUserByMessengerID(r.Context(), req.Messenger, req.UserIdentifier)
 	}
 
 	sub := &domain.Subscription{
-		UserID:    userID,
-		OriginCity: req.OriginCity,
-		Destination: req.Destination,
-		NightsMin: req.Nights,
-		NightsMax: req.Nights,
-		MaxPrice:  req.MaxPrice,
-		IsActive:  true,
+		UserID:         userID,
+		OriginCity:     req.OriginCity,
+		Destination:    req.Destination,
+		NightsMin:      req.Nights,
+		NightsMax:      req.Nights,
+		MaxPrice:       req.MaxPrice,
+		Messenger:      req.Messenger,
+		UserIdentifier: req.UserIdentifier,
+		IsActive:       true,
 	}
 	if req.DateFrom != "" {
 		if date, err := time.Parse("2006-01-02", req.DateFrom); err == nil {
@@ -247,4 +268,12 @@ func writeJSON(w http.ResponseWriter, data interface{}, status int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	json.NewEncoder(w).Encode(data)
+}
+
+func (a *API) findUserByMessengerID(ctx context.Context, messenger, identifier string) (int64, error) {
+	user, err := a.storage.FindUserByMessengerID(ctx, messenger, identifier)
+	if err != nil {
+		return 0, err
+	}
+	return user.ID, nil
 }

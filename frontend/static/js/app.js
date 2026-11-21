@@ -148,6 +148,19 @@ function renderHome() {
                         <label>Макс. бюджет на человека (₽)</label>
                         <input type="number" name="max_price" placeholder="Не ограничено">
                     </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Мессенджер</label>
+                            <select name="messenger" required>
+                                <option value="telegram">Telegram</option>
+                                <option value="max">MAX</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Username или ID</label>
+                            <input type="text" name="user_identifier" placeholder="@username или chat_id" required>
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-primary" style="width:100%;">Добавить подписку</button>
                     <div class="form-message" id="formMessage"></div>
                 </form>
@@ -379,7 +392,8 @@ async function handleSubscribe(e) {
         origin_city: data.origin_city,
         destination: data.destination,
         date_from: data.date_from || '',
-        yandex_captcha_response: data.yandex_captcha_response || '',
+        messenger: data.messenger || 'telegram',
+        user_identifier: data.user_identifier || '',
     };
     if (data.nights && parseInt(data.nights) >= 1 && parseInt(data.nights) <= 30) {
         payload.nights = parseInt(data.nights);
