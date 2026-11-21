@@ -122,14 +122,12 @@ function renderHome() {
                                 </label>
                             </div>
                         </div>
-                        <div class="search-field contact-actions">
-                            <div class="contact-input">
-                                <label>Ваш контакт</label>
+                        <div class="search-field contact-field">
+                            <label>Ваш контакт</label>
+                            <div class="contact-body">
                                 <input type="text" id="heroContact" placeholder="@username или ID" required>
                             </div>
-                            <div class="contact-button">
-                                <button type="button" onclick="handleHeroSearch()" class="btn btn-primary btn-large">Найти 🔍</button>
-                            </div>
+                            <button type="button" onclick="handleHeroSearch()" class="btn btn-primary btn-large">Найти 🔍</button>
                         </div>
                     </div>
                 </form>
