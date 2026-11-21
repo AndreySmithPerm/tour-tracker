@@ -99,28 +99,24 @@ function renderHome() {
                     <img src="/static/images/destinations/Turkey.jpg" alt="Турция">
                     <div class="destination-overlay">
                         <h3>🇹🇷 Турция</h3>
-                        <p>от 45 000 ₽</p>
                     </div>
                 </div>
                 <div class="destination-card">
                     <img src="/static/images/destinations/OAE.jpg" alt="ОАЭ">
                     <div class="destination-overlay">
                         <h3>🇦🇪 ОАЭ</h3>
-                        <p>от 55 000 ₽</p>
                     </div>
                 </div>
                 <div class="destination-card">
                     <img src="/static/images/destinations/Tayland.jpg" alt="Таиланд">
                     <div class="destination-overlay">
                         <h3>🇹🇭 Таиланд</h3>
-                        <p>от 70 000 ₽</p>
                     </div>
                 </div>
                 <div class="destination-card">
                     <img src="/static/images/destinations/Egypt.jpg" alt="Египет">
                     <div class="destination-overlay">
                         <h3>🇪🇬 Египет</h3>
-                        <p>от 40 000 ₽</p>
                     </div>
                 </div>
             </div>
