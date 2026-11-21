@@ -67,24 +67,75 @@ function renderHome() {
             
             <div class="search-form">
                 <form id="heroForm">
-                    <div class="search-field">
-                        <label>Назначение</label>
-                        <input type="text" id="heroDest" placeholder="Страна">
+                    <div class="search-row">
+                        <div class="search-field">
+                            <label>Город вылета</label>
+                            <input type="text" id="heroOrigin" placeholder="Пермь" required>
+                        </div>
+                        <div class="search-field">
+                            <label>Куда</label>
+                            <input type="text" id="heroDest" placeholder="Турция" required>
+                        </div>
+                        <div class="search-field">
+                            <label>Тип тура</label>
+                            <select id="heroType">
+                                <option value="">Все туры</option>
+                                <option value="hot">🔥 Горящие</option>
+                                <option value="early">📅 Раннее бронирование</option>
+                                <option value="last">⚡ Last Minute</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="search-field">
-                        <label>Выберите свой тур</label>
-                        <select id="heroType">
-                            <option value="">Все туры</option>
-                            <option value="hot">🔥 Горящие</option>
-                            <option value="early">📅 Раннее бронирование</option>
-                            <option value="last">⚡ Last Minute</option>
-                        </select>
+                    <div class="search-row">
+                        <div class="search-field">
+                            <label>Дата вылета</label>
+                            <input type="date" id="heroDateFrom">
+                        </div>
+                        <div class="search-field">
+                            <label>Дата возврата</label>
+                            <input type="date" id="heroDateTo">
+                        </div>
+                        <div class="search-field">
+                            <label>Ночей</label>
+                            <input type="number" id="heroNights" value="7" min="1" max="30">
+                        </div>
+                        <div class="search-field">
+                            <label>Бюджет (₽)</label>
+                            <input type="number" id="heroBudget" placeholder="Не ограничено">
+                        </div>
                     </div>
-                    <div class="search-field">
-                        <label>Дата</label>
-                        <input type="date" id="heroDate">
+                    <div class="search-row">
+                        <div class="search-field messenger-field">
+                            <label>📩 Куда отправить уведомление?</label>
+                            <div class="messenger-selector">
+                                <label class="messenger-option">
+                                    <input type="radio" name="messenger" value="telegram" checked>
+                                    <div class="messenger-card">
+                                        <span class="messenger-check">✓</span>
+                                        <span class="messenger-icon">✈️</span>
+                                        <span class="messenger-name">Telegram</span>
+                                    </div>
+                                </label>
+                                <label class="messenger-option">
+                                    <input type="radio" name="messenger" value="max">
+                                    <div class="messenger-card">
+                                        <span class="messenger-check">✓</span>
+                                        <span class="messenger-icon">💬</span>
+                                        <span class="messenger-name">MAX</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <button type="button" onclick="handleHeroSearch()" class="btn btn-primary">Найти 🔍</button>
+                    <div class="search-row">
+                        <div class="search-field">
+                            <label>Ваш контакт</label>
+                            <input type="text" id="heroContact" placeholder="@username или ID" required>
+                        </div>
+                        <div class="search-field">
+                            <button type="button" onclick="handleHeroSearch()" class="btn btn-primary btn-large">Найти 🔍</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </section>
@@ -119,66 +170,6 @@ function renderHome() {
                         <h3>🇪🇬 Египет</h3>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section class="subscribe-section" id="subscribe">
-            <div class="subscribe-card">
-                <h2>✨ Добавить подписку</h2>
-                <form id="subscribeForm">
-                    <div class="form-group">
-                        <label>Город вылета</label>
-                        <input type="text" name="origin_city" placeholder="Москва" required maxlength="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Направление</label>
-                        <input type="text" name="destination" placeholder="Анталья, Турция" required maxlength="100">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Дата вылета</label>
-                            <input type="date" name="date_from">
-                        </div>
-                        <div class="form-group">
-                            <label>Кол-во ночей</label>
-                            <input type="number" name="nights" value="7" min="1" max="30">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Макс. бюджет на человека (₽)</label>
-                        <input type="number" name="max_price" placeholder="Не ограничено">
-                    </div>
-                    <div class="form-group">
-                        <label>📩 Выберите мессенджер для оповещения!</label>
-                        <div class="messenger-selector">
-                            <label class="messenger-option">
-                                <input type="radio" name="messenger" value="telegram" checked>
-                                <div class="messenger-card">
-                                    <span class="messenger-check">✓</span>
-                                    <span class="messenger-icon">✈️</span>
-                                    <span class="messenger-name">Telegram</span>
-                                    <span class="messenger-hint">@username или @username</span>
-                                </div>
-                            </label>
-                            <label class="messenger-option">
-                                <input type="radio" name="messenger" value="max">
-                                <div class="messenger-card">
-                                    <span class="messenger-check">✓</span>
-                                    <span class="messenger-icon">💬</span>
-                                    <span class="messenger-name">MAX</span>
-                                    <span class="messenger-hint">ID или ссылка на профиль</span>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Ваш контакт</label>
-                        <input type="text" name="user_identifier" placeholder="@username" required>
-                        <small class="form-hint">Напишем вам, когда найдём выгодный тур</small>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width:100%;">Добавить подписку</button>
-                    <div class="form-message" id="formMessage"></div>
-                </form>
             </div>
         </section>
 
@@ -378,15 +369,75 @@ function renderTourCard(tour) {
 }
 
 // ===== Hero Search =====
-function handleHeroSearch() {
+async function handleHeroSearch() {
+    const origin = document.getElementById('heroOrigin')?.value;
     const dest = document.getElementById('heroDest')?.value;
     const type = document.getElementById('heroType')?.value;
-    
-    if (dest) {
-        document.getElementById('filterCity').value = dest;
+    const dateFrom = document.getElementById('heroDateFrom')?.value;
+    const dateTo = document.getElementById('heroDateTo')?.value;
+    const nights = document.getElementById('heroNights')?.value;
+    const budget = document.getElementById('heroBudget')?.value;
+    const contact = document.getElementById('heroContact')?.value;
+    const messenger = document.querySelector('input[name="messenger"]:checked')?.value;
+
+    if (!origin || !dest) {
+        alert('Укажите город вылета и направление!');
+        return;
     }
-    
-    navigate('/tours');
+
+    // Validate messenger
+    if (!messenger || messenger === '') {
+        alert('⚠️ Выберите мессенджер для оповещения!');
+        return;
+    }
+
+    // Validate contact
+    if (!contact || contact.trim() === '') {
+        alert('⚠️ Укажите ваш контакт для отправки уведомления');
+        return;
+    }
+
+    // Create subscription
+    const payload = {
+        origin_city: origin,
+        destination: dest,
+        date_from: dateFrom || '',
+        date_to: dateTo || '',
+        messenger: messenger || 'telegram',
+        user_identifier: contact,
+    };
+    payload.nights = nights && parseInt(nights) >= 1 && parseInt(nights) <= 30 ? parseInt(nights) : 7;
+    payload.max_price = budget ? parseInt(budget) || 0 : 0;
+
+    try {
+        const res = await fetch(`${API}/subscriptions`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+
+        const text = await res.text();
+        let result;
+        try {
+            result = JSON.parse(text);
+        } catch {
+            alert(text || 'Ошибка сервера');
+            return;
+        }
+
+        if (res.ok) {
+            alert('✅ Подписка создана! Мы уведомим вас, когда найдём выгодный тур.');
+            // Also navigate to tours page
+            if (dest) {
+                document.getElementById('filterCity')?.(dest);
+            }
+            navigate('/tours');
+        } else {
+            alert(result.error || 'Ошибка при создании подписки');
+        }
+    } catch (err) {
+        alert('Ошибка сети. Попробуйте позже.');
+    }
 }
 
 // ===== Handle Subscribe =====

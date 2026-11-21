@@ -215,6 +215,41 @@ img { max-width: 100%; }
     opacity: 0.8;
 }
 
+.search-field input:focus,
+.search-field select:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: rgba(255,255,255,0.15);
+}
+
+.search-field.messenger-field {
+    flex: 2;
+    min-width: 300px;
+}
+
+.search-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.search-row:last-child {
+    margin-bottom: 0;
+}
+
+.search-row .search-field {
+    flex: 1;
+    min-width: 150px;
+}
+
+.btn-large {
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
 .search-field input,
 .search-field select {
     width: 100%;
@@ -466,6 +501,31 @@ img { max-width: 100%; }
     background: var(--gold);
     opacity: 1;
     transform: scale(1);
+}
+
+/* Hero messenger selector styling */
+.search-form .messenger-card {
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1);
+}
+
+.search-form .messenger-card:hover {
+    border-color: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.15);
+}
+
+.search-form .messenger-option input[type="radio"]:checked + .messenger-card {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.2);
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.4);
+}
+
+.search-form .messenger-name {
+    color: white;
+}
+
+.search-form .messenger-hint {
+    color: rgba(255,255,255,0.7);
 }
 
 .messenger-icon {
