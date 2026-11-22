@@ -15,7 +15,7 @@ type User struct {
 // Subscription represents a user's tour search preference
 type Subscription struct {
 	ID             int64     `pg:"id,pk,autoincrement"`
-	UserID         int64     `pg:"user_id,notnull"`
+	UserID         int64     `pg:"user_id"`
 	OriginCity     string    `pg:"origin_city,notnull"`
 	Destination    string    `pg:"destination,notnull"`
 	Country        string    `pg:"country"`

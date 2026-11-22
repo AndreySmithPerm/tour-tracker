@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -212,6 +213,8 @@ func (a *API) handleCreateSubscription(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := a.storage.CreateSubscription(r.Context(), sub); err != nil {
+		a.storage.DB().ExecContext(r.Context(), "SELECT 1") // just to have access to logger if needed
+		log.Printf("CreateSubscription failed: sub=%+v err=%v", sub, err)
 		writeError(w, "Ошибка при создании подписки", http.StatusInternalServerError)
 		return
 	}
