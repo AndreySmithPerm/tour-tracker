@@ -2,16 +2,17 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+	"strconv"
 	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"strconv"
 	"github.com/travel-to-tour/tour-tracker/internal/affiliate"
 	"github.com/travel-to-tour/tour-tracker/internal/api"
 	"github.com/travel-to-tour/tour-tracker/internal/config"
@@ -46,8 +47,20 @@ func main() {
 		log.Println("Travelpayouts: not configured")
 	}
 
-	providers := []provider.TourProvider{provider.NewStubProvider("stub")}
-	log.Println("Tour providers initialized (stub mode)")
+	var providers []provider.TourProvider
+	
+	if cfg.Travelpayouts.APIToken != "" {
+		// Use real Travelata provider
+		providers = append(providers, provider.NewTravelataProvider(
+			cfg.Travelpayouts.APIToken,
+			fmt.Sprintf("%d", cfg.Travelpayouts.Marker),
+		))
+		log.Println("Tour providers initialized (Travelata real API)")
+	} else {
+		// Fallback to stub for development
+		providers = append(providers, provider.NewStubProvider("stub"))
+		log.Println("Tour providers initialized (stub mode)")
+	}
 
 	var tgBot *telegramDelivery.Bot
 	if cfg.Telegram.Token != "" {
