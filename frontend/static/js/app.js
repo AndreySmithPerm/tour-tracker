@@ -108,22 +108,22 @@ function renderHome() {
                         <div class="search-field messenger-field">
                             <label>📩 Куда отправить уведомление?</label>
                             <div class="messenger-selector">
-                                <label class="messenger-option">
-                                    <input type="radio" name="messenger" value="telegram" checked>
-                                    <div class="messenger-card">
-                                        <span class="messenger-check">✓</span>
-                                        <span class="messenger-icon">✈️</span>
-                                        <span class="messenger-name">Telegram</span>
-                                    </div>
-                                </label>
-                                <label class="messenger-option">
-                                    <input type="radio" name="messenger" value="max">
-                                    <div class="messenger-card">
-                                        <span class="messenger-check">✓</span>
-                                        <span class="messenger-icon">💬</span>
-                                        <span class="messenger-name">MAX</span>
-                                    </div>
-                                </label>
+                                    <label class="messenger-option">
+                                        <input type="radio" name="messenger" value="telegram">
+                                        <div class="messenger-card">
+                                            <span class="messenger-check">✓</span>
+                                            <span class="messenger-icon">✈️</span>
+                                            <span class="messenger-name">Telegram</span>
+                                        </div>
+                                    </label>
+                                    <label class="messenger-option">
+                                        <input type="radio" name="messenger" value="max" checked>
+                                        <div class="messenger-card">
+                                            <span class="messenger-check">✓</span>
+                                            <span class="messenger-icon">💬</span>
+                                            <span class="messenger-name">MAX</span>
+                                        </div>
+                                    </label>
                             </div>
                         </div>
                         <div class="search-field contact-field">
