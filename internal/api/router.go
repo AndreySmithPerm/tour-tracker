@@ -44,6 +44,8 @@ func (a *API) Router() http.Handler {
 		limited.ServeHTTP(w, r)
 	})
 
+	r.Post("/unsubscribe", a.handleUnsubscribe)
+
 	r.Group(func(r chi.Router) {
 		r.Use(sec.AuthRequiredMiddleware(a.jwtCfg))
 		r.Get("/me/subscriptions", a.handleMySubscriptions)
@@ -270,6 +272,45 @@ func (a *API) handleMe(w http.ResponseWriter, r *http.Request) {
 	email, _ := r.Context().Value(sec.EmailKey).(string)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{"user": map[string]interface{}{"id": userID, "email": email}})
+}
+
+type unsubscribeRequest struct {
+	Messenger      string `json:"messenger"`
+	UserIdentifier string `json:"user_identifier"`
+}
+
+func (a *API) handleUnsubscribe(w http.ResponseWriter, r *http.Request) {
+	r.Body = http.MaxBytesReader(w, r.Body, 64*1024)
+	var req unsubscribeRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeError(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+	if req.Messenger == "" {
+		writeError(w, "Укажите мессенджер", http.StatusBadRequest)
+		return
+	}
+	if req.Messenger != MessengerTelegram && req.Messenger != MessengerMax {
+		writeError(w, "Неподдерживаемый мессенджер. Выберите Telegram или MAX", http.StatusBadRequest)
+		return
+	}
+	if req.UserIdentifier == "" {
+		writeError(w, "Укажите username или ID для отписки", http.StatusBadRequest)
+		return
+	}
+
+	count, err := a.storage.DeactivateSubscriptionsByIdentifier(r.Context(), req.Messenger, req.UserIdentifier)
+	if err != nil {
+		log.Printf("Unsubscribe failed: messenger=%s identifier=%s err=%v", req.Messenger, req.UserIdentifier, err)
+		writeError(w, "Ошибка при отписке", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"message":   "Вы успешно отписались от рассылки",
+		"unsubscribed": count,
+	})
 }
 
 func writeError(w http.ResponseWriter, message string, status int) {

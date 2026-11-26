@@ -47,6 +47,12 @@ function render() {
         form.addEventListener('submit', handleSubscribe);
     }
 
+    // Setup unsubscribe form
+    const unsubscribeForm = document.getElementById('unsubscribeForm');
+    if (unsubscribeForm) {
+        unsubscribeForm.addEventListener('submit', handleUnsubscribe);
+    }
+
     // Setup filters
     const filterBtn = document.getElementById('filterBtn');
     if (filterBtn) {
@@ -181,6 +187,30 @@ function renderHome() {
             </div>
         </section>
 
+        <section class="unsubscribe-section">
+            <div class="section-header">
+                <h2>ОТПИСАТЬСЯ ОТ РАССЫЛКИ</h2>
+                <p>Если вы больше не хотите получать уведомления по конкретному направлению</p>
+            </div>
+            <form id="unsubscribeForm" class="unsubscribe-form">
+                <div class="unsubscribe-fields">
+                    <div class="search-field">
+                        <label>Мессенджер</label>
+                        <select id="unsubscribeMessenger" required>
+                            <option value="max">MAX</option>
+                            <option value="telegram">Telegram</option>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <label>Ваш контакт</label>
+                        <input type="text" id="unsubscribeIdentifier" placeholder="@username или ID" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-danger">Отписаться ❌</button>
+                <div id="unsubscribeMessage" class="form-message"></div>
+            </form>
+        </section>
+
         <section class="how-it-works">
             <div class="section-header">
                 <h2>КАК ЭТО РАБОТАЕТ</h2>
@@ -199,7 +229,7 @@ function renderHome() {
                 <div class="step">
                     <div class="step-icon">🔔</div>
                     <h3>Получаете уведомление</h3>
-                    <p>Когда цена упадёт — пишем в Telegram</p>
+                    <p>Когда цена упадёт — пишем в ваш мессенджер</p>
                 </div>
             </div>
         </section>
@@ -401,7 +431,7 @@ async function handleHeroSearch() {
         destination: dest,
         date_from: dateFrom || '',
         date_to: dateTo || '',
-        messenger: messenger || 'telegram',
+        messenger: messenger || 'max',
         user_identifier: contact,
     };
     payload.nights = nights && parseInt(nights) >= 1 && parseInt(nights) <= 30 ? parseInt(nights) : 7;
@@ -472,7 +502,7 @@ async function handleSubscribe(e) {
         origin_city: data.origin_city,
         destination: data.destination,
         date_from: data.date_from || '',
-        messenger: data.messenger || 'telegram',
+        messenger: data.messenger || 'max',
         user_identifier: data.user_identifier || '',
     };
     if (data.nights && parseInt(data.nights) >= 1 && parseInt(data.nights) <= 30) {
@@ -501,7 +531,7 @@ async function handleSubscribe(e) {
         }
 
         if (res.ok) {
-            showFormMessage(msgEl, '✅ Подписка создана! Мы уведомим вас в Telegram.', 'success');
+            showFormMessage(msgEl, '✅ Подписка создана! Мы уведомим вас в вашем мессенджере.', 'success');
             form.reset();
         } else {
             showFormMessage(msgEl, result.error || 'Ошибка при создании подписки', 'error');
@@ -517,6 +547,61 @@ async function handleSubscribe(e) {
 function showFormMessage(el, text, type) {
     el.textContent = text;
     el.className = 'form-message ' + type;
+}
+
+// ===== Unsubscribe =====
+async function handleUnsubscribe(e) {
+    e.preventDefault();
+    const form = e.target;
+    const msgEl = document.getElementById('unsubscribeMessage');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Отправка...';
+
+    const messenger = document.getElementById('unsubscribeMessenger')?.value;
+    const identifier = document.getElementById('unsubscribeIdentifier')?.value;
+
+    if (!messenger || !identifier || identifier.trim() === '') {
+        showFormMessage(msgEl, '⚠️ Укажите мессенджер и ваш контакт', 'error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Отписаться ❌';
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API}/unsubscribe`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messenger: messenger,
+                user_identifier: identifier.trim(),
+            }),
+        });
+
+        const text = await res.text();
+        let result;
+        try {
+            result = JSON.parse(text);
+        } catch {
+            showFormMessage(msgEl, text || 'Ошибка сервера', 'error');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Отписаться ❌';
+            return;
+        }
+
+        if (res.ok) {
+            showFormMessage(msgEl, '✅ Вы успешно отписались от рассылки!', 'success');
+            form.reset();
+        } else {
+            showFormMessage(msgEl, result.error || 'Ошибка при отписке', 'error');
+        }
+    } catch (err) {
+        showFormMessage(msgEl, 'Ошибка сети. Попробуйте позже.', 'error');
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Отписаться ❌';
 }
 
 // ===== Filter Tours =====

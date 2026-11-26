@@ -135,6 +135,21 @@ func (s *Storage) DeactivateSubscription(ctx context.Context, subID int64) error
 	return err
 }
 
+// DeactivateSubscriptionsByIdentifier deactivates all active subscriptions
+// for a given messenger and user identifier (used for unsubscribe from website)
+func (s *Storage) DeactivateSubscriptionsByIdentifier(ctx context.Context, messenger, identifier string) (int, error) {
+	result, err := s.db.ModelContext(ctx, &domain.Subscription{}).
+		Where("messenger = ?", messenger).
+		Where("user_identifier = ?", identifier).
+		Where("is_active = true").
+		Set("is_active = false").
+		Update()
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
+}
+
 // --- PriceSnapshot operations ---
 
 func (s *Storage) UpsertSnapshot(ctx context.Context, snap *domain.PriceSnapshot) error {

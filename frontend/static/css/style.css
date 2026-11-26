@@ -591,6 +591,76 @@ img { max-width: 100%; }
     font-style: italic;
 }
 
+/* ===== Unsubscribe Section ===== */
+.unsubscribe-section {
+    padding: 80px 20px;
+    background: #fff5f5;
+}
+
+.unsubscribe-form {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--radius);
+    padding: 40px;
+    box-shadow: var(--shadow);
+}
+
+.unsubscribe-fields {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.unsubscribe-fields .search-field {
+    flex: 1;
+    min-width: 0;
+}
+
+.unsubscribe-fields label {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+}
+
+.unsubscribe-fields input,
+.unsubscribe-fields select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.unsubscribe-fields input:focus,
+.unsubscribe-fields select:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+
+.btn-danger:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
 /* ===== Hot Tours ===== */
 .hot-tours {
     padding: 80px 20px;
@@ -939,5 +1009,9 @@ img { max-width: 100%; }
     
     .messenger-selector {
         grid-template-columns: 1fr 1fr;
+    }
+    
+    .unsubscribe-fields {
+        flex-direction: column;
     }
 }
