@@ -64,16 +64,43 @@ func NewBot(token string, s *storage.Storage) (*Bot, error) {
 func (b *Bot) setupHandlers() {
 	// Welcome message on new member
 	b.teleBot.Handle("/start", func(c tb.Context) error {
-		return c.Send("Привет! Я — сервис отслеживания лучших цен на туры.\n\n"+
-			"Добавьте направление, и я уведомлю вас, когда цена упадёт.\n\n"+
-			"Используйте /add чтобы начать.")
+		return c.Send(
+			"🌴 <b>Tour Tracker</b> — найдём лучшие цены на туры!\n\n"+
+				"Мы мониторим цены от ведущих туроператоров и уведомляем, когда цена падает.\n\n"+
+				"<b>Команды:</b>\n"+
+				"➕ /add — добавить подписку на отслеживание\n"+
+				"📋 /subs — список активных подписок\n"+
+				"❌ /remove — удалить подписку\n"+
+				"❓ /help — справка\n\n"+
+				"Или подпишитесь на сайте: gid-ok.ru 🌐",
+		&tb.ReplyMarkup{
+			InlineKeyboard: [][]tb.InlineButton{
+				{
+					{Text: "➕ Добавить", Data: "add_start"},
+					{Text: "📋 Подписки", Data: "subs_list"},
+				},
+			},
+		},
+		)
+	})
+
+	b.teleBot.Handle("add_start", func(c tb.Context) error {
+		return b.handleAddStart(c)
+	})
+
+	b.teleBot.Handle("subs_list", func(c tb.Context) error {
+		return b.handleListSubs(c)
 	})
 
 	b.teleBot.Handle("/help", func(c tb.Context) error {
-		return c.Send("/add — добавить подписку на отслеживание туров\n" +
-			"/subs — список активных подписок\n" +
-			"/remove <id> — удалить подписку\n" +
-			"/help — справка")
+		return c.Send(
+			"<b>📖 Справка по командам</b>\n\n"+
+				"➕ <b>/add</b> — добавить подписку на отслеживание туров\n\n"+
+				"📋 <b>/subs</b> — показать список активных подписок\n\n"+
+				"❌ <b>/remove &lt;номер&gt;</b> — удалить подписку по номеру\n\n"+
+				"⏹ <b>/cancel</b> — отменить добавление подписки\n\n"+
+				"🌐 Подписаться на сайте: gid-ok.ru",
+		)
 	})
 
 	b.teleBot.Handle("/add", func(c tb.Context) error {
@@ -105,7 +132,7 @@ func (b *Bot) setupHandlers() {
 		userID := c.Sender().ID
 		delete(b.phaseMap, userID)
 		delete(b.subData, userID)
-		return c.Send("Отмена.")
+		return c.Send("⏹ Добавление отменено.")
 	})
 }
 
@@ -113,7 +140,10 @@ func (b *Bot) handleAddStart(c tb.Context) error {
 	userID := c.Sender().ID
 	b.phaseMap[userID] = phaseOriginCity
 	b.subData[userID] = &subscriptionData{}
-	return c.Send("Введите город вылета (например: Москва):")
+	return c.Send(
+		"🌍 <b>Шаг 1/5</b>\n\n"+
+			"Введите город вылета (например: Москва, Пермь, Санкт-Петербург):",
+	)
 }
 
 func (b *Bot) handleAddStep(c tb.Context, userID int64, phase string) error {
@@ -126,27 +156,49 @@ func (b *Bot) handleAddStep(c tb.Context, userID int64, phase string) error {
 
 	switch phase {
 	case phaseOriginCity:
+		if len(text) < 2 {
+			return c.Send("⚠️ Город слишком короткий. Введите город вылета:")
+		}
 		data.OriginCity = text
 		b.phaseMap[userID] = phaseDestination
-		return c.Send("Введите направление (страну/город):")
+		return c.Send(
+			"🏖 <b>Шаг 2/5</b>\n\n"+
+				"Введите направление (страну/город):\n"+
+				"Примеры: Турция, Таиланд, ОАЭ, Египет, Сочи",
+		)
 
 	case phaseDestination:
+		if len(text) < 2 {
+			return c.Send("⚠️ Направление слишком короткое. Введите страну или город:")
+		}
 		data.Destination = text
 		b.phaseMap[userID] = phaseDateFrom
-		return c.Send("Введите дату вылета (ГГГГ-ММ-ДД) или напишите 'любая':")
+		return c.Send(
+			"📅 <b>Шаг 3/5</b>\n\n"+
+				"Введите дату вылета (ГГГГ-ММ-ДД) или напишите 'любая':",
+		)
 
 	case phaseDateFrom:
 		data.DateFrom = text
 		b.phaseMap[userID] = phaseNights
-		return c.Send("Введите количество ночей (например: 7):")
+		return c.Send(
+			"🌙 <b>Шаг 4/5</b>\n\n"+
+				"Введите количество ночей (например: 7, 10, 14):",
+		)
 
 	case phaseNights:
+		nights, err := strconv.Atoi(text)
+		if err != nil || nights < 1 || nights > 60 {
+			return c.Send("⚠️ Введите корректное количество ночей (от 1 до 60):")
+		}
 		data.Nights = text
 		b.phaseMap[userID] = phaseMaxPrice
-		return c.Send("Введите максимальный бюджет на человека (руб) или напишите 'любой':")
+		return c.Send(
+			"💰 <b>Шаг 5/5</b>\n\n"+
+				"Введите максимальный бюджет на человека (руб) или напишите 'любой':",
+		)
 
 	case phaseMaxPrice:
-		// All info collected
 		delete(b.phaseMap, userID)
 		return b.createSubscription(c, userID, text)
 
@@ -165,7 +217,7 @@ func (b *Bot) createSubscription(c tb.Context, userID int64, maxPriceText string
 	user, err := b.storage.EnsureUser(ctx, userID, "")
 	if err != nil {
 		b.logger.Printf("EnsureUser error: %v", err)
-		return c.Send("Ошибка при регистрации. Попробуйте позже.")
+		return c.Send("❌ Ошибка при регистрации. Попробуйте позже.")
 	}
 
 	// Create subscription (simplified - no date validation for MVP)
@@ -177,6 +229,8 @@ func (b *Bot) createSubscription(c tb.Context, userID int64, maxPriceText string
 		NightsMax:    14,
 		MaxPrice:     0, // Will parse in production
 		IsActive:     true,
+		Messenger:    "telegram",
+		UserIdentifier: fmt.Sprintf("%d", userID),
 	}
 
 	if maxPriceText != "любой" && maxPriceText != "" {
@@ -195,45 +249,65 @@ func (b *Bot) createSubscription(c tb.Context, userID int64, maxPriceText string
 	err = b.storage.CreateSubscription(ctx, sub)
 	if err != nil {
 		b.logger.Printf("CreateSubscription error: %v", err)
-		return c.Send("Ошибка при создании подписки. Попробуйте позже.")
+		return c.Send("❌ Ошибка при создании подписки. Попробуйте позже.")
 	}
 
 	priceFilter := ""
 	if sub.MaxPrice > 0 {
-		priceFilter = fmt.Sprintf(" (до %d руб)", sub.MaxPrice)
+		priceFilter = fmt.Sprintf(" | до %d руб", sub.MaxPrice)
 	}
 
-	return c.Send(fmt.Sprintf(
-		"✅ Подписка добавлена!\n\n"+
-			"%s → %s\n"+
-			"Ночей: %d%s\n\n"+
-			"Я уведомлю вас, когда найду выгодную цену.",
-		sub.OriginCity, sub.Destination, sub.NightsMin, priceFilter,
-	))
+	return c.Send(
+		fmt.Sprintf(
+			"✅ <b>Подписка добавлена!</b>\n\n"+
+				"🛫 %s → %s\n"+
+				"🌙 %d ночей%s\n\n"+
+				"Я уведомлю вас, когда найду выгодную цену!",
+			sub.OriginCity, sub.Destination, sub.NightsMin, priceFilter,
+		),
+		&tb.ReplyMarkup{
+			InlineKeyboard: [][]tb.InlineButton{
+				{
+					{Text: "📋 Мои подписки", Data: "subs_list"},
+					{Text: "➕ Ещё", Data: "add_start"},
+				},
+			},
+		},
+	)
 }
 
 func (b *Bot) handleListSubs(c tb.Context) error {
 	ctx := context.Background()
 	user, err := b.storage.GetUserByTGChatID(ctx, c.Sender().ID)
 	if err != nil {
-		return c.Send("Ошибка при поиске пользователя.")
+		return c.Send("❌ Ошибка при поиске пользователя.")
 	}
 	if user == nil {
-		return c.Send("Вы не зарегистрированы. Отправьте /start.")
+		return c.Send("❌ Вы не зарегистрированы. Отправьте /start.")
 	}
 
 	subs, err := b.storage.GetUserActiveSubscriptions(ctx, user.ID)
 	if err != nil {
-		return c.Send("Ошибка при загрузке подписок.")
+		return c.Send("❌ Ошибка при загрузке подписок.")
 	}
 
 	if len(subs) == 0 {
-		return c.Send("У вас нет активных подписок. Используйте /add для добавления.")
+		return c.Send(
+			"📭 <b>У вас нет активных подписок</b>\n\n"+
+				"Добавьте первое направление:",
+			&tb.ReplyMarkup{
+				InlineKeyboard: [][]tb.InlineButton{
+					{
+						{Text: "➕ Добавить подписку", Data: "add_start"},
+					},
+				},
+			},
+		)
 	}
 
-	msg := "Ваши подписки:\n\n"
+	msg := "<b>📋 Ваши подписки:</b>\n\n"
 	for i, sub := range subs {
-		msg += fmt.Sprintf("%d. %s → %s", i+1, sub.OriginCity, sub.Destination)
+		msg += fmt.Sprintf("<b>%d.</b> %s → %s", i+1, sub.OriginCity, sub.Destination)
 		if sub.MaxPrice > 0 {
 			msg += fmt.Sprintf(" | до %d руб", sub.MaxPrice)
 		}
@@ -241,31 +315,45 @@ func (b *Bot) handleListSubs(c tb.Context) error {
 	}
 
 	msg += "\nУдалить: /remove <номер>"
-	return c.Send(msg)
+
+	markup := tb.ReplyMarkup{
+		InlineKeyboard: [][]tb.InlineButton{
+			{
+				{Text: "➕ Добавить ещё", Data: "add_start"},
+				{Text: "🔄 Обновить", Data: "subs_list"},
+			},
+		},
+	}
+
+	return c.Send(msg, &markup)
 }
 
 func (b *Bot) handleRemoveSub(c tb.Context) error {
 	ctx := context.Background()
 	user, err := b.storage.GetUserByTGChatID(ctx, c.Sender().ID)
 	if err != nil || user == nil {
-		return c.Send("Пользователь не найден.")
+		return c.Send("❌ Пользователь не найден.")
 	}
 
 	// Parse subscription ID from command
 	args := strings.Fields(c.Text())
 	if len(args) < 2 {
-		return c.Send("Укажите номер подписки: /remove 1")
+		return c.Send(
+			"❓ Укажите номер подписки для удаления:\n\n"+
+				"📋 /subs — посмотреть список\n"+
+				"❌ /remove 1 — удалить первую подписку",
+		)
 	}
 
 	subID, err := strconv.ParseInt(args[1], 10, 64)
 	if err != nil {
-		return c.Send("Неверный номер подписки.")
+		return c.Send("⚠️ Неверный номер подписки. Введите число.")
 	}
 
 	// Verify ownership
 	subs, err := b.storage.GetUserActiveSubscriptions(ctx, user.ID)
 	if err != nil {
-		return c.Send("Ошибка.")
+		return c.Send("❌ Ошибка.")
 	}
 
 	found := false
@@ -273,26 +361,44 @@ func (b *Bot) handleRemoveSub(c tb.Context) error {
 		if sub.ID == subID {
 			_ = b.storage.DeactivateSubscription(ctx, subID)
 			found = true
-			break
+			return c.Send(
+				fmt.Sprintf(
+					"✅ Подписка удалена!\n\n"+
+						"🛫 %s → %s",
+					sub.OriginCity, sub.Destination,
+				),
+				&tb.ReplyMarkup{
+					InlineKeyboard: [][]tb.InlineButton{
+						{
+							{Text: "📋 Мои подписки", Data: "subs_list"},
+							{Text: "➕ Добавить", Data: "add_start"},
+						},
+					},
+				},
+			)
 		}
 	}
 
 	if found {
-		return c.Send("Подписка удалена.")
+		return c.Send("✅ Подписка удалена.")
 	}
-	return c.Send("Подписка не найдена.")
+	return c.Send("❌ Подписка не найдена. Используйте /subs для просмотра.")
 }
 
 // SendTourNotification sends a tour notification to a user
 func (b *Bot) SendTourNotification(ctx context.Context, userID int64, offer *domain.TourOffer, sub *domain.Subscription, reason string) error {
 	var reasonText string
+	var reasonEmoji string
 	switch reason {
 	case "new":
-		reasonText = "🔥 Новая находка!"
+		reasonText = "Новая находка!"
+		reasonEmoji = "🔥"
 	case "price_drop":
-		reasonText = "📉 Цена упала!"
+		reasonText = "Цена упала!"
+		reasonEmoji = "📉"
 	default:
-		reasonText = "✨ Выгодный тур!"
+		reasonText = "Выгодный тур!"
+		reasonEmoji = "✨"
 	}
 
 	countryEmoji := "🌍"
@@ -315,23 +421,29 @@ func (b *Bot) SendTourNotification(ctx context.Context, userID int64, offer *dom
 	}
 
 	msg := fmt.Sprintf(
-		"%s %s %s → %s\n\n"+
-			"🏨 %s\n"+
+		"%s %s\n\n"+
+			"<b>%s %s</b>\n"+
+			"🛫 %s → %s\n\n"+
+			"🏨 <b>%s</b>\n"+
 			"⭐ %d звёзд\n"+
 			"🌙 %d ночей\n"+
-			"💰 %s\n\n"+
-			"👉 %s",
-		reasonText,
-		countryEmoji,
+			"💰 <b>%s</b>",
+		reasonEmoji, reasonText,
+		countryEmoji, sub.Destination,
 		sub.OriginCity, sub.Destination,
 		offer.HotelName,
 		offer.HotelStars,
 		offer.Nights,
 		priceText,
-		offer.AffiliateURL,
 	)
 
-	_, err := b.teleBot.Send(&tb.User{ID: userID}, msg)
+	markup := &tb.ReplyMarkup{
+		InlineKeyboard: [][]tb.InlineButton{
+			{{Text: "👉 Забронировать", URL: offer.AffiliateURL}},
+		},
+	}
+
+	_, err := b.teleBot.Send(&tb.User{ID: userID}, msg, markup)
 	return err
 }
 
