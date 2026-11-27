@@ -122,17 +122,6 @@ img { max-width: 100%; }
     transform: translateY(-1px);
 }
 
-.btn-telegram {
-    background: #0088cc;
-    color: white;
-    font-size: 13px;
-    padding: 10px 18px;
-}
-
-.btn-telegram:hover {
-    background: #006699;
-}
-
 /* ===== Hero ===== */
 .hero {
     position: relative;

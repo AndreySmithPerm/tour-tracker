@@ -65,8 +65,8 @@ function renderHome() {
     return `
         <section class="hero">
             <div class="hero-content">
-                <p class="hero-tag">TOUR TRACKER</p>
-                <h1>TOUR TRACKER</h1>
+                <p class="hero-tag">ОТЛЕЖИВАЕМ СНИЖЕНИЕ ЦЕН</p>
+                <h1>ПОИСК ТУРОВ</h1>
                 <p class="hero-subtitle">Мы просто ищем лучшие возможности вашей мечты!</p>
                     <p class="hero-desc">Для Вас бесплатно!</p>
             </div>
